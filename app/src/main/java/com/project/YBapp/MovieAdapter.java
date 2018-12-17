@@ -14,10 +14,8 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    //Adapter기능 구현
-    //Gengerate implememt method
     Context context;
-    ArrayList<Movie> items = new ArrayList<Movie>(); //데이터 보관
+    ArrayList<Movie> items = new ArrayList<Movie>();
 
     OnItemClickListener listener;
 
@@ -49,7 +47,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             viewHolder.setItem(item);
 
-            //item을 눌렸을때 일어나는 반응
             viewHolder.setOnItemClickListener(listener);
     }
 
@@ -57,7 +54,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return items.get(position);
     }
 
-    //어댑터에 아이템을 추가 하고 싶을때
     public void addItem(Movie item){
         items.add(item);
     }
@@ -76,7 +72,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         OnItemClickListener listener;
 
-        //생산자
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

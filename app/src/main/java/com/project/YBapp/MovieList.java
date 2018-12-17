@@ -9,5 +9,4 @@ public class MovieList {
     int start;
     int display;
     ArrayList <Movie> items = new ArrayList<Movie>();
-
 }

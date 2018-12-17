@@ -1,7 +1,5 @@
 package com.project.YBapp;
 
-
-
 public class Movie {
 
     String title;

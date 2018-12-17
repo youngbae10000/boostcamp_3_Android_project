@@ -28,8 +28,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String clientId = "SozSTvGuCAU2mIBAOqo2"; //네이버에서 발급받은 애플리케이션 클라이언트 아이디값";
-    private String clientSecret = "h4QZ1Ceunx"; //네이버에서 발급받은애플리케이션 클라이언트 시크릿값";
+    private String clientId = "SozSTvGuCAU2mIBAOqo2";
+    private String clientSecret = "h4QZ1Ceunx";
     String keyword;
 
     TextView textView;
@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        ////RequestQueue 초기화 코드
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new MovieAdapter(getApplicationContext());
-        //리사이클러 뷰 클릭 이벤트
+
         adapter.setOnItemClickListener(new MovieAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(MovieAdapter.ViewHolder holder, View view, int position) {
@@ -79,22 +77,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init() {
-        ////RequestQueue 초기화 코드
 
         if (AppHelper.requestQueue == null) {
-            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext()); //Context 객체 전달
+            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
     }
 
-    //코드출력
     public void println(String data) {
 
-        textView.append(data + "\n"); //한 줄씩 추가 append?
+        textView.append(data + "\n");
     }
 
-
-    //Request Queue;
-    //Request 객체를 만들고
     public void sendRequest(String title) {
 
         String NAVERURL = "https://openapi.naver.com/v1/search/movie.json?dispaly=100&query=" + title;
@@ -106,11 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        Log.d("Response =>", response);
-                        //println("응답 -> " + response);
 
-                        //응답처리 Json -> java 객체로
+                        Log.d("Response =>", response);
+
                         processResponse(response);
                     }
                 },
@@ -119,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
 
                         Log.d("ERROR_RESPONSE =>", error.toString());
-                        //println("에러 ->" + error.getMessage());
                     }
                 }
         ) {
@@ -134,27 +124,26 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //volley는 catshing을 하기 때문에
-        request.setShouldCache(false); //받은 결과를 그대로 보여주세요
-        AppHelper.requestQueue.add(request);//request 객체를 넣어 준댜
-        //println("요첨 보냄."); //console 에서
+        request.setShouldCache(false);
+        AppHelper.requestQueue.add(request);
     }
 
-
-
-    //응답처리 Json -> java 객체로
     public void processResponse(String response) {
 
         Gson gson = new Gson();
 
         adapter.items.clear();
-        MovieList moveList = gson.fromJson(response, MovieList.class);//fromJson 라이브러리
+        MovieList moveList = gson.fromJson(response, MovieList.class);
 
         if (moveList != null) {
 
             for (int i = 0; i < moveList.items.size(); i++) {
 
-                String t_title = moveList.items.get(i).title;
+                String tmp = moveList.items.get(i).title;
+                String t_title = null;
+                t_title = tmp.replace("<b>", "");
+                t_title = t_title.replace("</b>", "");
+                t_title = t_title.replace("&amp;", ":");
                 String t_link = moveList.items.get(i).link;
                 String t_image = moveList.items.get(i).image;
                 String t_subtitle = moveList.items.get(i).subtitle;
@@ -163,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
                 String t_actor = moveList.items.get(i).actor;
                 String t_userRating = moveList.items.get(i).userRating;
 
-                //MovieAdapter adapter;
                 adapter.addItem(new Movie(t_title,t_link,t_image,t_subtitle,t_pubDate,t_director,t_actor,t_userRating));
             }
 
